@@ -6,6 +6,10 @@ void setup() {
 }
 
 void loop() {
-  beeldscherm_Hello();
-  delay(10000);
+  beeldscherm_BootStart();
+  delay(4000);
+  beeldscherm_Draw("Loading...", 0);
+  delay(5000);
+  beeldscherm_BootFinished();
+  delay(4000);
 }
