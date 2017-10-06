@@ -1,16 +1,15 @@
 // Besturing van het beeldscherm (https://learn.sparkfun.com/tutorials/micro-oled-breakout-hookup-guide)
 #include <SFE_MicroOLED.h>  // Load OLED library
-#include <Wire.h>           // Load liberary needed for I2C
 
 // Set the pins
-#define PIN_RESET 9 // Connect RST to pin 9
-#define DC_JUMPER 1 // Set to 1 and connect D/C to 3.3 V
+const byte PIN_RESET = 9; // Connect RST to pin 9
+const byte DC_JUMPER = 1; // Set to 1 and connect D/C to 3.3 V
 
 // Declare the MicroOLED object
 MicroOLED oled(PIN_RESET, DC_JUMPER);
 
 // Standard initialation of the OLED
-void beeldscherm (){
+void Display () {
   oled.begin();     // Initialize the OLED
   oled.clear(ALL);  // Clear the display's internal memory
   oled.display();   // Display what's in the buffer (splashscreen)
@@ -26,7 +25,7 @@ void beeldscherm (){
  *          2 sets the text to medium/7-segment (5 columns, 3 rows worth of characters)
  *          3 sets the text to large (5 columns, 1 row worth of characters) 
  */
-void beeldscherm_Prepare(int font){
+void displayPrepare (int font) {
   oled.setFontType(font); // set the font size
   oled.clear(PAGE);       // clean the buffer
   oled.setCursor(0,0);    // set text cursor 
@@ -41,28 +40,33 @@ void beeldscherm_Prepare(int font){
  *          2 sets the text to medium/7-segment (5 columns, 3 rows worth of characters)
  *          3 sets the text to large (5 columns, 1 row worth of characters)
  */
-void beeldscherm_Draw(String input, int font){
-  beeldscherm_Prepare(font);// Prepare the screen to be written to
+void displayDraw (String input, int font) {
+  displayPrepare(font);// Prepare the screen to be written to
   oled.print(input);        // Send text to buffer
   oled.display();           // Output the buffer to the screen
 }
-void beeldscherm_Draw(int input, int font){
-  beeldscherm_Prepare(font);// Prepare the screen to be written to
+void displayDraw (int input, int font) {
+  displayPrepare(font);// Prepare the screen to be written to
   oled.print(input);        // Send text to buffer
   oled.display();           // Output the buffer to the screen
 }
-void beeldscherm_Draw(double input, int font){
-  beeldscherm_Prepare(font);// Prepare the screen to be written to
+void displayDraw (double input, int font) {
+  displayPrepare(font);// Prepare the screen to be written to
   oled.print(input);        // Send text to buffer
   oled.display();           // Output the buffer to the screen
 }
-void beeldscherm_Draw(float input, int font){
-  beeldscherm_Prepare(font);// Prepare the screen to be written to
+void displayDraw (float input, int font) {
+  displayPrepare(font);// Prepare the screen to be written to
   oled.print(input);        // Send text to buffer
   oled.display();           // Output the buffer to the screen
 }
-void beeldscherm_Draw(long input, int font){
-  beeldscherm_Prepare(font);// Prepare the screen to be written to
+void displayDraw (long input, int font) {
+  displayPrepare(font);// Prepare the screen to be written to
+  oled.print(input);        // Send text to buffer
+  oled.display();           // Output the buffer to the screen
+}
+void displayDraw (char input, int font) {
+  displayPrepare(font);// Prepare the screen to be written to
   oled.print(input);        // Send text to buffer
   oled.display();           // Output the buffer to the screen
 }
@@ -70,7 +74,7 @@ void beeldscherm_Draw(long input, int font){
 /* 
  * Draw 'RMSG Booting...' on the screen 
  */
-void beeldscherm_BootStart(){
+void displayBootStart(){
   oled.setFontType(1);      // Set the text to medium/7-segment (5 columns, 3 rows worth of characters)
   oled.clear(PAGE);         // Clear the buffer.
   oled.setCursor(0,0);      // Set the text cursor to the upper-left of the screen
@@ -84,7 +88,7 @@ void beeldscherm_BootStart(){
 /* 
  * Draw 'RMSG Boot Finished' on the screen 
  */
-void beeldscherm_BootFinished(){
+void displayBootFinished(){
   oled.setFontType(1);      // Set the text to medium/7-segment (5 columns, 3 rows worth of characters)
   oled.clear(PAGE);         // Clear the buffer.
   oled.setCursor(0,0);      // Set the text cursor to the upper-left of the screen
