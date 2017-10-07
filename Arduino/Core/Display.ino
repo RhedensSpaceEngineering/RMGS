@@ -12,9 +12,9 @@
  *   GND -------------- GND
  *   RST -------------- Digital pin 9
  *   
- *   Created by Arend-Jan Hengst, RMSG, 07-10-2017 
+ * Created by Arend-Jan Hengst, RMSG, 13-09-2017 
  *   
- *   Hookup Guide: https://learn.sparkfun.com/tutorials/micro-oled-breakout-hookup-guide
+ * Hookup Guide: https://learn.sparkfun.com/tutorials/micro-oled-breakout-hookup-guide
  */
 // Load OLED Library
 #include <SFE_MicroOLED.h>
@@ -23,10 +23,14 @@
 const byte PIN_RESET = 9; // Connect RST to pin 9
 const byte DC_JUMPER = 1; // Set to 1 and connect D/C to 3.3 V
 
-// Declare the MicroOLED object
+// Create a MicroOLED object
 MicroOLED oled(PIN_RESET, DC_JUMPER);
 
-// Standard initialation of the OLED
+/*
+ * Display
+ * 
+ * 'Constructor' of Display and creates a connection with the Arduino
+ */
 void Display () {
   oled.begin();     // Initialize the OLED
   oled.clear(ALL);  // Clear the display's internal memory
