@@ -4,6 +4,7 @@
  * Connects to the Sparkfun OLED so it can be used.
  * Adds display, displayDraw, displayPrepare, displayBootStart, displayBootFinished
  * 
+ * Pin layout:
  * MicroOLED --------- Arduino
  *   SCL -------------- SCL (A5 on older 'Duinos')
  *   SDA -------------- SDA (A4 on older 'Duinos')
