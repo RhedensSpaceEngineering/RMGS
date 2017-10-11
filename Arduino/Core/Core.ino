@@ -1,7 +1,6 @@
 // Load essential Libraries
 #include <Wire.h>           // Load liberary needed for I2C
-
-
+// temporary because of weird out-of-scope errors
 float pitch, roll, heading;
 
 void setup() {
