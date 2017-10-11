@@ -1,6 +1,9 @@
 // Load essential Libraries
 #include <Wire.h>           // Load liberary needed for I2C
 
+
+float pitch, roll, heading;
+
 void setup() {
   ///////////////////
   // Commincations //
@@ -10,21 +13,27 @@ void setup() {
   /////////////////
   // Beeldscherm //
   /////////////////
-  beeldscherm();
+  Display();
   ///////////////////
   // Rotatie Meter //
   ///////////////////
-  rotatie_meter();
+  Rotation_Sensor();
 }
 
 void loop() {
   displayBootStart();
-  rotatie_meter_read();
-  rotatie_meter_calc();
+  rotationSensorRead();
+  rotationSensorCalc();
   //Serial.println("Heading: "); 
   //Serial.println(rotatie_meter_heading());
 
-  calculate();
+  rotationSensorCalcOrientation();
+  Serial.print("Pitch, Roll: ");
+  Serial.print(pitch, 2);
+  Serial.print(", ");
+  Serial.println(roll, 2);
+  Serial.print("Heading: "); 
+  Serial.println(heading, 2);
   delay(1000);
   
   /*delay(4000);
