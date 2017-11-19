@@ -27,15 +27,24 @@ MPL3115A2 altitudeSensor;
  * Connects to the sensor and edits the settings
  */
 void Altitude_Sensor() {
-
-    altitudeSensor.begin(); // Get sensor online
-    
-    // Configure the sensor
-    
-    altitudeSensor.setModeAltimeter(); // Measure altitude above sea level in meters  
-    
-    altitudeSensor.setOversampleRate(7); // Set Oversample to the recommended 128
-    altitudeSensor.enableEventFlags(); // Enable all three pressure and temp event flags 
+  // get sensor online
+  altitudeSensor.begin();
+  
+  // check if online
+  Wire.beginTransmission(MPL3115A2_ADDRESS); // Initialize the Tx buffer
+  Wire.write(OUT_P_MSB);  // Address of data to get
+  Wire.endTransmission(false); // Send the Tx buffer, but send a restart to keep connection alive
+  Wire.requestFrom(MPL3115A2_ADDRESS, 1); // Read one byte form the slave register address
+  if (Wire.read() == 255) { // check if response is not empty
+    displayDrawStatusCode("1B0"); // Notify when sensor is succesfully connected
+  } else {
+    displayDrawStatusCode("3B0"); // Notify when sensor didn't connect correctly
+  }
+  
+  // Configure the sensor
+  altitudeSensor.setModeAltimeter(); // Measure altitude above sea level in meters  
+  altitudeSensor.setOversampleRate(7); // Set Oversample to the recommended 128
+  altitudeSensor.enableEventFlags(); // Enable all three pressure and temp event flags 
 
 }
 
