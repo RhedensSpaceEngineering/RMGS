@@ -35,7 +35,7 @@ void Altitude_Sensor() {
   Wire.write(OUT_P_MSB);  // Address of data to get
   Wire.endTransmission(false); // Send the Tx buffer, but send a restart to keep connection alive
   Wire.requestFrom(MPL3115A2_ADDRESS, 1); // Read one byte form the slave register address
-  if (Wire.read() == 255) { // check if response is not empty
+  if (Wire.read() == 0) { // check if response is not empty (M0 PRO == 0, UNO == 255)
     displayDrawStatusCode("1B0"); // Notify when sensor is succesfully connected
   } else {
     displayDrawStatusCode("3B0"); // Notify when sensor didn't connect correctly
