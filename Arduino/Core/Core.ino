@@ -4,18 +4,24 @@
 // temporary because of weird out-of-scope errors
 float pitch, roll, heading;
 // altitude sensor variables
-float altitude,temperature; 
+float altitude, temperature;
+// global sleep time
+int sleep = 5000;
 
 void setup() {
   ////////////////////
   // Communications //
   ////////////////////
   Serial.begin(9600); // start a serial communication at 9600 bits per second
-  
-  /////////////
-  // Display //
-  /////////////
+  /////////////////////
+  //     Display     //
+  /////////////////////
   Display();
+  /////////////////////
+  //     SD Card     //
+  /////////////////////
+  //Serial.println("SD Card Call");
+  SD_Card();
   /////////////////////
   // Rotation Sensor //
   /////////////////////
@@ -24,20 +30,13 @@ void setup() {
   // Altitude Sensor //
   /////////////////////
   Altitude_Sensor();
-  /////////////////////
-  //     SD Card     //
-  /////////////////////
-  SD_Card();
 }
 
 void loop() {
-  displayBootStart();
-  rotationSensorRead();
-  rotationSensorCalc();
-  //Serial.println("Heading: "); 
-  //Serial.println(rotatie_meter_heading());
 
   // output rotation data
+  rotationSensorRead();
+  rotationSensorCalc();
   rotationSensorCalcOrientation();
   Serial.print("Pitch, Roll: ");
   Serial.print(pitch, 2);
@@ -55,11 +54,12 @@ void loop() {
   Serial.println(temperature, 2);
 
   // save to SD card
-  sdCardOpenFile();
-  sdCardPrint(temperature);
-  sdCardCloseFile();
+  //sdCardOpenFile();
+  //sdCardPrint(temperature);
+  //sdCardCloseFile();
   
   delay(1000);
+  displayBootFinished();
 
   
   /*delay(4000);
