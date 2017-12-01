@@ -20,7 +20,7 @@
 #include <SFE_MicroOLED.h>
 
 // Set the pins
-const byte PIN_RESET = 9; // Connect RST to pin 9
+const byte PIN_RESET = 8; // Connect RST to pin 9
 const byte DC_JUMPER = 1; // Set to 1 and connect D/C to 3.3 V
 
 // Create a MicroOLED object
@@ -37,6 +37,8 @@ void Display () {
   oled.display();   // Display what's in the buffer (splashscreen)
   delay(1000);      // Delay 1000 ms
   oled.clear(PAGE); // Clear the buffer.
+  // start boot proces
+  displayBootStart();
 }
 
 /*
@@ -66,37 +68,7 @@ void displayPrepare (int font) {
  *          2 sets the text to medium/7-segment (5 columns, 3 rows worth of characters)
  *          3 sets the text to large (5 columns, 1 row worth of characters)
  */
-void displayDraw (String input, int font) {
-  displayPrepare(font);     // Prepare the screen to be written to
-  oled.print(input);        // Send text to buffer
-  oled.display();           // Output the buffer to the screen
-}
-void displayDraw (int input, int font) {
-  displayPrepare(font);     // Prepare the screen to be written to
-  oled.print(input);        // Send text to buffer
-  oled.display();           // Output the buffer to the screen
-}
-void displayDraw (double input, int font) {
-  displayPrepare(font);     // Prepare the screen to be written to
-  oled.print(input);        // Send text to buffer
-  oled.display();           // Output the buffer to the screen
-}
-void displayDraw (float input, int font) {
-  displayPrepare(font);     // Prepare the screen to be written to
-  oled.print(input);        // Send text to buffer
-  oled.display();           // Output the buffer to the screen
-}
-void displayDraw (long input, int font) {
-  displayPrepare(font);     // Prepare the screen to be written to
-  oled.print(input);        // Send text to buffer
-  oled.display();           // Output the buffer to the screen
-}
-void displayDraw (char input, int font) {
-  displayPrepare(font);     // Prepare the screen to be written to
-  oled.print(input);        // Send text to buffer
-  oled.display();           // Output the buffer to the screen
-}
-void displayDraw (boolean input, boolean font) {
+template <class I> void displayDraw (I input, int font) {
   displayPrepare(font);     // Prepare the screen to be written to
   oled.print(input);        // Send text to buffer
   oled.display();           // Output the buffer to the screen
@@ -107,7 +79,7 @@ void displayDraw (boolean input, boolean font) {
  * 
  * Draw 'RMSG Booting...' on the screen
  */
-void displayBootStart(){
+void displayBootStart () {
   oled.setFontType(1);      // Set the text to medium/7-segment (5 columns, 3 rows worth of characters)
   oled.clear(PAGE);         // Clear the buffer.
   oled.setCursor(0,0);      // Set the text cursor to the upper-left of the screen
@@ -116,6 +88,8 @@ void displayBootStart(){
   oled.setCursor(0,17);     // Goto next line
   oled.print("Booting..."); // Send string to buffer
   oled.display();           // Output the buffer
+  delay(sleep);
+}
 }
 
 /* 
@@ -123,7 +97,7 @@ void displayBootStart(){
  *  
  * Draw 'RMSG Boot Finished' on the screen 
  */
-void displayBootFinished(){
+void displayBootFinished () {
   oled.setFontType(1);      // Set the text to medium/7-segment (5 columns, 3 rows worth of characters)
   oled.clear(PAGE);         // Clear the buffer.
   oled.setCursor(0,0);      // Set the text cursor to the upper-left of the screen
