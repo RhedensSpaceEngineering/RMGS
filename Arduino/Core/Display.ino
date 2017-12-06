@@ -2,7 +2,7 @@
  * Display
  * 
  * Connects to the Sparkfun OLED so it can be used.
- * Adds display, displayDraw, displayPrepare, displayBootStart, displayBootFinished
+ * Adds display, displayDraw, displayPrepare, displayBootStart, displayDrawStatusCode, displayBootFinished
  * 
  * Pin layout:
  * MicroOLED --------- Arduino
@@ -68,7 +68,7 @@ void displayPrepare (int font) {
  *          2 sets the text to medium/7-segment (5 columns, 3 rows worth of characters)
  *          3 sets the text to large (5 columns, 1 row worth of characters)
  */
-template <class I> void displayDraw (I input, int font) {
+template <class DisplayData> void displayDraw (DisplayData input, int font) {
   displayPrepare(font);     // Prepare the screen to be written to
   oled.print(input);        // Send text to buffer
   oled.display();           // Output the buffer to the screen
@@ -90,6 +90,21 @@ void displayBootStart () {
   oled.display();           // Output the buffer
   delay(sleep);
 }
+
+/*
+ * displayDrawStatusCode
+ * 
+ * Draws a statusCode as given and sends it to the log file, and then waits for 5 seconds.
+ * 
+ * String statusCode The statuscode that needs to be shown.
+ */
+void displayDrawStatusCode (String statusCode) {
+  // use displaydraw to draw the code
+  displayDraw(statusCode, 1);
+  // send to log file
+  //sdCardPrint(statusCode);
+  // wait for 5 seconds
+  delay(sleep);
 }
 
 /* 
