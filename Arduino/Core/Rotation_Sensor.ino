@@ -24,7 +24,7 @@
 const float DECLINATION = 1.55;
 
 // Define the variables that hold the data
-float axCalculated, ayCalculated, azCalculated, mxCalculated, myCalculated, mzCalculated, gxCalculated, gyCalculated, gzCalculated;
+/*place holder*/
  
 // SDO_XM and SDO_G are both pulled high, so our addresses are:
 const int LSM9DS1_M = 0x1E; // Would be 0x1C if SDO_M is LOW
@@ -46,11 +46,9 @@ void Rotation_Sensor () {
 
   // initiliaze the sensor
   if (rotationSensor.begin()) {
-    displayDraw("1C0", 0); // Notify when sensor is succesfully connected
-    delay(5000);
+    displayDrawStatusCode("1C0"); // Notify when sensor is succesfully connected
   } else {
-    displayDraw("3C0", 0); // Notify when sensor didn't connect correctly
-    delay(5000);
+    displayDrawStatusCode("3C0"); // Notify when sensor didn't connect correctly
   }
 }
 
@@ -70,7 +68,7 @@ void rotationSensorRead() {
     rotationSensor.readAccel();  
   } else {
     // Display a warning code if no data is available
-    displayDraw("2C1A", 0);
+    displayDrawStatusCode("2C1A");
   }
   // check if new magnetometer data is available
   if (rotationSensor.magAvailable()) {
@@ -78,7 +76,7 @@ void rotationSensorRead() {
     rotationSensor.readMag();  
   } else {
     // Display a warning code if no data is available
-    displayDraw("2C1B", 0);
+    displayDrawStatusCode("2C1B");
   }
   // check if new gyroscope data is available
   if (rotationSensor.gyroAvailable()) {
@@ -86,7 +84,7 @@ void rotationSensorRead() {
     rotationSensor.readGyro();  
   } else {
     // Display a warning code if no data is available
-    displayDraw("2C1C", 0);
+    displayDrawStatusCode("2C1C");
   }
 }
 
