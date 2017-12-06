@@ -18,8 +18,11 @@
  */
 #include "SparkFunMPL3115A2.h" // Load MPL3115A2 library
 
-//Create an instance of the object
+// Create an instance of the object
 MPL3115A2 altitudeSensor;
+
+// Used to keep the start altitude
+float startAltitude;
 
 /*
  * Altitude_Sensor
@@ -35,7 +38,7 @@ void Altitude_Sensor() {
   Wire.write(OUT_P_MSB);  // Address of data to get
   Wire.endTransmission(false); // Send the Tx buffer, but send a restart to keep connection alive
   Wire.requestFrom(MPL3115A2_ADDRESS, 1); // Read one byte form the slave register address
-  if (Wire.read() == 0) { // check if response is not empty (M0 PRO == 0, UNO == 255)
+  if (Wire.read() == 255) { // check if response is not empty (M0 PRO == 0, UNO == 255)
     displayDrawStatusCode("1B0"); // Notify when sensor is succesfully connected
   } else {
     displayDrawStatusCode("3B0"); // Notify when sensor didn't connect correctly
@@ -44,7 +47,10 @@ void Altitude_Sensor() {
   // Configure the sensor
   altitudeSensor.setModeAltimeter(); // Measure altitude above sea level in meters  
   altitudeSensor.setOversampleRate(7); // Set Oversample to the recommended 128
-  altitudeSensor.enableEventFlags(); // Enable all three pressure and temp event flags 
+  altitudeSensor.enableEventFlags(); // Enable all three pressure and temp event flags
+
+  // Set start altitude
+  startAltitude = altitudeSensor.readAltitude();
 
 }
 
@@ -52,19 +58,17 @@ void Altitude_Sensor() {
  * altitudeCalc
  * 
  * updates the altitude variable to the new altitude
- * 
- * readAltitude()  updates altitude
+ * and converts it to the altitude relative to starting point
  */
 void altitudeCalc(){
-   altitude = altitudeSensor.readAltitude(); // read Altitude_Sensor from Breakout
+  // Starting altitude - Current altitude = relative altitude
+  relativeAltitude = startAltitude - altitudeSensor.readAltitude();
 }
 
 /*
  * temperatureCalc
  * 
  * updates the temperature variable to the new temperature
- * 
- * readTemp()  updates temperature
  */
 void temperatureCalc(){
   temperature = altitudeSensor.readTemp(); // read Altitude_Sensor from Breakout
