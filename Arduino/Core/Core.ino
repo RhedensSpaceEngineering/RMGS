@@ -25,6 +25,11 @@ int sleep = 5000;
 // keep start time
 unsigned long startTime;
 
+/*
+ * setup
+ * 
+ * Sets the entire program up by starting communications and the sensors and the SD card.
+ */
 void setup() {
   ////////////////////
   // Communications //
@@ -60,6 +65,11 @@ void setup() {
   displayBootFinished();
 }
 
+/*
+ * loop
+ * 
+ * The core of the program which every lap collects all data and sends it to the SD card.
+ */
 void loop() {
   // set start time
   startTime = millis();
