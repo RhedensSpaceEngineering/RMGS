@@ -53,21 +53,6 @@ void SD_Card() {
 }
 
 /*
- * sdCardOpenFile
- * 
- * opens file with path fileName
- * 
- * File fileName the file that needs to be opened
- */
-//void sdCardOpenFile(String fileName) {
-//  dataFile = SD.open(fileName, FILE_WRITE); // opening file
-//  // check if file is opened
-//  if (!dataFile) {
-//    displayDraw("2D1", 0); 
-//  }
-//}
-
-/*
  * sdCaredOpenFile
  * 
  * opens the standard file, as declared in FILE_NAME
@@ -112,13 +97,3 @@ template <class sdCardData> void sdCardPrint(sdCardData input) {
 void sdCardCloseFile() {
   dataFile.close();
 }
-
-
-
-
-
-
-
-
-
-
