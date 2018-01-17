@@ -1,3 +1,15 @@
+/*
+ * Core
+ * 
+ * Contains most of global variables so they can be used in the entire program
+ * Also Contains the setup function which calls the setup functions of all sensors.
+ * In the loop function all data is gathered and send to the SD card.
+ *  
+ * Created by Tim Hiemstra & Arend-Jan Hengst, RMSG, 17-01-2018
+ * 
+ * Repository: https://github.com/RhedensSpaceEngineering/RMGS
+ */
+
 // Load essential Libraries
 #include <Wire.h>           // Load liberary needed for I2C
 
@@ -104,14 +116,4 @@ void loop() {
   // display end time
   Serial.println("End time: " + String(millis() - startTime));
   displayDraw(millis() - startTime, 0);
-  
-  //delay(5000);
-  //displayBootFinished();
-
-  
-  /*delay(4000);
-  displayDraw("Loading...", 0);
-  delay(5000);
-  displayBootFinished();
-  delay(4000);*/
 }
