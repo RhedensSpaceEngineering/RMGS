@@ -57,6 +57,9 @@ void SD_Card() {
  * 
  * opens the standard file, as declared in FILE_NAME
  * Tries 1 more time when failed to open file.
+ * 
+ * return boolean True  if the file has been opened
+ *                Flase if the file hasn't been opened
  */
 boolean sdCardOpenFile() {
   dataFile = SD.open(FILE_NAME, FILE_WRITE); // opening file
