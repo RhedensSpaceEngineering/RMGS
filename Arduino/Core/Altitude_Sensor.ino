@@ -1,5 +1,5 @@
 /*
- *  Altitude_Sensor
+ * Altitude_Sensor
  * 
  * Connects the Sparkfun MPL3115A2 to the arduino so it can be read out.
  * Adds Altitude_Sensor, altitudeCalc, temperatureCalc
@@ -48,21 +48,20 @@ void Altitude_Sensor() {
   altitudeSensor.setModeAltimeter(); // Measure altitude above sea level in meters  
   altitudeSensor.setOversampleRate(7); // Set Oversample to the recommended 128
   altitudeSensor.enableEventFlags(); // Enable all three pressure and temp event flags
-
+  
   // Set start altitude
   startAltitude = altitudeSensor.readAltitude();
-
 }
 
 /*
  * altitudeCalc
  * 
  * updates the altitude variable to the new altitude
- * and converts it to the altitude relative to starting point
+ * and converts it to the altitude relative to the starting point
  */
 void altitudeCalc(){
   // Starting altitude - Current altitude = relative altitude
-  relativeAltitude = startAltitude - altitudeSensor.readAltitude();
+  relativeAltitude = noiseFilter(startAltitude - altitudeSensor.readAltitude(), relativeAltitude);
 }
 
 /*

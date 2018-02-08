@@ -23,8 +23,8 @@
 // Define the Declination (calculate from: http://www.ngdc.noaa.gov/geomag-web/#declination)
 const float DECLINATION = 1.55;
 
-// Define the variables that hold the data
-/*place holder*/
+// Used to keep the smoothed data
+float axSmoothed, aySmoothed, azSmoothed, mxSmoothed, mySmoothed, mzSmoothed, gxSmoothed, gySmoothed, gzSmoothed;
  
 // SDO_XM and SDO_G are both pulled high, so our addresses are:
 const int LSM9DS1_M = 0x1E; // Would be 0x1C if SDO_M is LOW
@@ -50,8 +50,26 @@ void Rotation_Sensor () {
   } else {
     displayDrawStatusCode("3C0"); // Notify when sensor didn't connect correctly
   }
+
+  // update data in memory
+  rotationSensorRead();
+
+  // set first values for the noise filter
+  // Accelerometer
+  axSmoothed = rotationSensor.ax;
+  aySmoothed = rotationSensor.ay;
+  azSmoothed = rotationSensor.az;
+  // magnetometer
+  mxSmoothed = rotationSensor.mx;
+  mySmoothed = rotationSensor.my;
+  mzSmoothed = rotationSensor.mz;
+  // gyroscope
+  gxSmoothed = rotationSensor.gx;
+  gySmoothed = rotationSensor.gy;
+  gzSmoothed = rotationSensor.gz;
 }
 
+// Possibly a safe guard is needed for when no data is available
 /*
  * rotationSensorRead
  * 
@@ -98,20 +116,34 @@ void rotationSensorRead() {
  * calcGyro()   updates Gx, Gy, Gz
  */
 void rotationSensorCalc() {
+  // Remove the noise from the sensor data
+  // Accelerometer
+  axSmoothed = noiseFilter(rotationSensor.ax, axSmoothed);
+  aySmoothed = noiseFilter(rotationSensor.ay, aySmoothed);
+  azSmoothed = noiseFilter(rotationSensor.az, azSmoothed);
+  // magnetometer
+  mxSmoothed = noiseFilter(rotationSensor.mx, mxSmoothed);
+  mySmoothed = noiseFilter(rotationSensor.my, mySmoothed);
+  mzSmoothed = noiseFilter(rotationSensor.mz, mzSmoothed);
+  // gyroscope
+  gxSmoothed = noiseFilter(rotationSensor.gx, gxSmoothed);
+  gySmoothed = noiseFilter(rotationSensor.gy, gySmoothed);
+  gzSmoothed = noiseFilter(rotationSensor.gz, gzSmoothed);
+  
   // convert the accelerometer data
-  axCalculated = rotationSensor.calcAccel(rotationSensor.ax); // Convert the x-axis to g's
-  ayCalculated = rotationSensor.calcAccel(rotationSensor.ay); // Convert the y-axis to g's
-  azCalculated = rotationSensor.calcAccel(rotationSensor.az); // Convert the z-axis to g's
+  axCalculated = rotationSensor.calcAccel(axSmoothed); // Convert the x-axis to g's
+  ayCalculated = rotationSensor.calcAccel(aySmoothed); // Convert the y-axis to g's
+  azCalculated = rotationSensor.calcAccel(azSmoothed); // Convert the z-axis to g's
   
   // convert the magnetometer data  
-  mxCalculated = rotationSensor.calcMag(rotationSensor.mx); // Convert the x-axis to dps's
-  myCalculated = rotationSensor.calcMag(rotationSensor.my); // Convert the y-axis to dps's
-  mzCalculated = rotationSensor.calcMag(rotationSensor.mz); // Convert the z-axis to dps's
+  mxCalculated = rotationSensor.calcMag(mxSmoothed); // Convert the x-axis to dps's
+  myCalculated = rotationSensor.calcMag(mySmoothed); // Convert the y-axis to dps's
+  mzCalculated = rotationSensor.calcMag(mzSmoothed); // Convert the z-axis to dps's
   
   // convert the gyroscope data
-  gxCalculated = rotationSensor.calcGyro(rotationSensor.gx);  // Convert the x-axis to dps's
-  gyCalculated = rotationSensor.calcGyro(rotationSensor.gy);  // Convert the y-axis to dps's
-  gzCalculated = rotationSensor.calcGyro(rotationSensor.gz);  // Convert the z-axis to dps's
+  gxCalculated = rotationSensor.calcGyro(gxSmoothed);  // Convert the x-axis to dps's
+  gyCalculated = rotationSensor.calcGyro(gySmoothed);  // Convert the y-axis to dps's
+  gzCalculated = rotationSensor.calcGyro(gzSmoothed);  // Convert the z-axis to dps's
 }
 
 /*
@@ -127,12 +159,12 @@ void rotationSensorCalcOrientation() {
   // create temporary variables for calculation purposes
   // Because the magnetomer's x and y axes are opposite to the accelerometer,
   // the my and mx are substituded for each other.
-  float aX = rotationSensor.ax;
-  float aY = rotationSensor.ay;
-  float aZ = rotationSensor.az;
-  float mX = -rotationSensor.my;
-  float mY = -rotationSensor.mx;
-  float mZ = rotationSensor.mz;
+  float aX = axSmoothed;
+  float aY = aySmoothed;
+  float aZ = azSmoothed;
+  float mX = -mySmoothed;
+  float mY = -mxSmoothed;
+  float mZ = mzSmoothed;
   
   // calculate the roll
   roll = atan2(aY, aZ);

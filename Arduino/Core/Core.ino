@@ -17,7 +17,8 @@
 float pitch, roll, heading;
 float axCalculated, ayCalculated, azCalculated, mxCalculated, myCalculated, mzCalculated, gxCalculated, gyCalculated, gzCalculated;
 // altitude sensor variables
-float relativeAltitude, temperature;
+// relativeAltitude is always equals to 0 at the start of the program
+float relativeAltitude = 0, temperature;
 // Used to store the data before writing to SD-card
 String dataString = "";
 // global sleep time
@@ -125,5 +126,6 @@ void loop() {
 
   // display end time
   Serial.println("End time: " + String(millis() - startTime));
-  displayDraw(millis() - startTime, 0);
+  displayDraw(roll, 0);
+  //displayDraw(millis() - startTime, 0);
 }
